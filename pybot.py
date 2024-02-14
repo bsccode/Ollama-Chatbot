@@ -9,20 +9,20 @@ client = OpenAI(
 
 characters = []
 
-character_name = input("Who are you talking to today?")
+character_name = input("Who are you talking to today? ").lower()
 
-if os.path.exists(f"{character_name}_context.txt"):
-    with open(f"{character_name}_context.txt", 'r') as file:
+if os.path.exists(f"characters\{character_name}_context.txt"):
+    with open(f"characters\{character_name}_context.txt", 'r') as file:
         context = file
 else:
     backstory = input("Please enter your characters backstory and context for this chat: ")
-    with open(f"{character_name}_context.txt", "w") as f:
+    with open(f"characters\{character_name}_context.txt", "w") as f:
       f.write(backstory)
     characters.append(character_name)
 
 
 # Load initial context from a file
-with open(f"{character_name}_context.txt", "r") as file:
+with open(f"characters\{character_name}_context.txt", "r") as file:
     context = file.read()
 
 class ChatHistoryManager:
@@ -40,7 +40,7 @@ class ChatHistoryManager:
             json.dump(history, file, indent=4)
 
 # Initialize ChatHistoryManager
-history_manager = ChatHistoryManager(f"{character_name}_chat_history.json")
+history_manager = ChatHistoryManager(f"characters\{character_name}_chat_history.json")
 # Load chat history
 chat_history = history_manager.load_chat_history()
 
@@ -56,7 +56,7 @@ initial_messages = [{"role": "system", "content": context}] + chat_history
 
 # Generate the initial response
 initial_response = client.chat.completions.create(
-  model="llama2",
+  model="dolphin-mixtral",
   messages=initial_messages
 )
 
@@ -78,7 +78,7 @@ while True:
 
     # Generate response based on the updated history
     response = client.chat.completions.create(
-        model="llama2",
+        model="dolphin-mixtral",
         messages=messages_for_completion
     )
     
