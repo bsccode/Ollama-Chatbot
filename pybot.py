@@ -7,8 +7,6 @@ client = OpenAI(
     api_key='ollama',  # Required, but unused in this context
 )
 
-characters = []
-
 character_name = input("Who are you talking to today? ").lower()
 
 if os.path.exists(f"characters\{character_name}_context.txt"):
@@ -18,7 +16,6 @@ else:
     backstory = input("Please enter your characters backstory and context for this chat: ")
     with open(f"characters\{character_name}_context.txt", "w") as f:
       f.write(backstory)
-    characters.append(character_name)
 
 
 # Load initial context from a file
